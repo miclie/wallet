@@ -1,4 +1,3 @@
-#This configuration file will hold common configs to be shared among all files
 eureka:
   instance:
     prefer-ip-address: false
@@ -10,4 +9,16 @@ security:
   oauth2:
     resource:
       user-info-uri: http://localhost:8090/uaa/user/current
-      token-info-uri: http://localhost:8090/uaa/oauth/check_token #add this information
+      token-info-uri: http://localhost:8090/uaa/oauth/check_token
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
