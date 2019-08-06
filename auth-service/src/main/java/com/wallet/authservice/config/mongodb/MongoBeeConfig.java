@@ -24,7 +24,7 @@ public class MongoBeeConfig {
     public Mongobee mongobee() {
         Mongobee runner = new Mongobee();
         runner.setMongoTemplate(mongoTemplate);
-        //runner.setDbName(mongoProperties.getDatabase());
+        runner.setDbName("test");
         runner.setChangeLogsScanPackage(MONGODB_CHANGELOGS_PACKAGE);
         return runner;
     }
