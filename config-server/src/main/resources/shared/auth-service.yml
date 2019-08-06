@@ -10,4 +10,4 @@ spring:
       port: 27017
       username: ""
       password: ""
-      database: ""
+      database: "embeded_db"
