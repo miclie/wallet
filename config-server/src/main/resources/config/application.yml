@@ -1,24 +1,14 @@
-eureka:
-  instance:
-    prefer-ip-address: false
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/shared
+  profiles:
+    active: native
+  security:
+    user:
+      password: 1234
 
-security:
-  oauth2:
-    resource:
-      user-info-uri: http://localhost:8090/uaa/user/current
-      token-info-uri: http://localhost:8090/uaa/oauth/check_token
-
-logging:
-  level:
-    org.springframework.security: DEBUG
-
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 20000
+server:
+  port: 8888
