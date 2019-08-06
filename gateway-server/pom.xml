@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gateway</groupId>
-	<artifactId>gateway-server</artifactId>
+	<artifactId>gateway-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gateway-server</name>
+	<name>gateway-service</name>
 	<description>Gateway Server project for Spring Boot</description>
 
 	<properties>

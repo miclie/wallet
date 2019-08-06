@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.registry</groupId>
-	<artifactId>registry-server</artifactId>
+	<artifactId>registry-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>registry-server</name>
+	<name>registry-service</name>
 	<description>Registry Server project for Spring Boot</description>
 
 	<properties>
