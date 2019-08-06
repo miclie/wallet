@@ -22,16 +22,13 @@ public class MongoBeeConfig {
 
     @Bean
     public Mongobee mongobee() {
-        Mongobee runner = new Mongobee(String.format(MONGODB_URL_FORMAT,
-                mongoProperties.getUsername(),
-                mongoProperties.getPassword(),
-                mongoProperties.getHost(),
-                mongoProperties.getPort(),
-                mongoProperties.getDatabase()));
+        Mongobee runner = new Mongobee();
         runner.setMongoTemplate(mongoTemplate);
-        runner.setDbName(mongoProperties.getDatabase());
+        //runner.setDbName(mongoProperties.getDatabase());
         runner.setChangeLogsScanPackage(MONGODB_CHANGELOGS_PACKAGE);
         return runner;
     }
+    
+   
 
 }
