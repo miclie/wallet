@@ -7,3 +7,10 @@ spring:
       fail-fast: true
       password: 1234
       username: user
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+      
