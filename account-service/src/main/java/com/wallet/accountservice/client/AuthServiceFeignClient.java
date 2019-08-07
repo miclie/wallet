@@ -10,7 +10,7 @@ import com.wallet.accountservice.dto.UserRegistrationDto;
 @FeignClient(name = "auth-service")
 public interface AuthServiceFeignClient {
 
-    @PostMapping(value = "/uaa/user")
+    @PostMapping
     UserDto createUser(@RequestBody UserRegistrationDto user);
 
 }

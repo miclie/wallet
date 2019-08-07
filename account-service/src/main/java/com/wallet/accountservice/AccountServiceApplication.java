@@ -9,9 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableOAuth2Sso
 @EnableFeignClients
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AccountServiceApplication {
 
     public static void main(String[] args) {
