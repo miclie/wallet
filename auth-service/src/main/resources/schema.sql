@@ -1,103 +1,105 @@
-SET sql_mode = '';
+CREATE TABLE OAUTH_CLIENT_DETAILS (
+CLIENT_ID VARCHAR(255) NOT NULL PRIMARY KEY,
+CLIENT_SECRET VARCHAR(255) NOT NULL,
+RESOURCE_IDS VARCHAR(255) DEFAULT NULL,
+SCOPE VARCHAR(255) DEFAULT NULL,
+AUTHORIZED_GRANT_TYPES VARCHAR(255) DEFAULT NULL,
+WEB_SERVER_REDIRECT_URI VARCHAR(255) DEFAULT NULL,
+AUTHORITIES VARCHAR(255) DEFAULT NULL,
+ACCESS_TOKEN_VALIDITY INT(11) DEFAULT NULL,
+REFRESH_TOKEN_VALIDITY INT(11) DEFAULT NULL,
+ADDITIONAL_INFORMATION VARCHAR(4096) DEFAULT NULL,
+AUTOAPPROVE VARCHAR(255) DEFAULT NULL);
+ 
+ INSERT INTO OAUTH_CLIENT_DETAILS (
+	CLIENT_ID,CLIENT_SECRET,
+	RESOURCE_IDS,
+	SCOPE,
+	AUTHORIZED_GRANT_TYPES,
+	WEB_SERVER_REDIRECT_URI,AUTHORITIES,
+	ACCESS_TOKEN_VALIDITY,REFRESH_TOKEN_VALIDITY,
+	ADDITIONAL_INFORMATION,AUTOAPPROVE)
+	VALUES(
+    'USER_CLIENT_APP','{bcrypt}$2a$10$EOs8VROb14e7ZnydvXECA.4LoIhPOoFHKvVF/iBZ/ker17Eocz4Vi',
+	'USER_CLIENT_RESOURCE,USER_ADMIN_RESOURCE',
+	'role_admin,role_user',
+	'authorization_code,password,refresh_token,implicit',
+	NULL,NULL,
+	900,3600,
+	'{}',NULL);
+ 
+ 
+ 
+CREATE TABLE PERMISSION (
+ID INT PRIMARY KEY AUTO_INCREMENT,
+NAME VARCHAR(60) UNIQUE KEY);
 
-create table if not exists  oauth_client_details (
-  client_id varchar(255) not null,
-  client_secret varchar(255) not null,
-  web_server_redirect_uri varchar(2048) default null,
-  scope varchar(255) default null,
-  access_token_validity int(11) default null,
-  refresh_token_validity int(11) default null,
-  resource_ids varchar(1024) default null,
-  authorized_grant_types varchar(1024) default null,
-  authorities varchar(1024) default null,
-  additional_information varchar(4096) default null,
-  autoapprove varchar(255) default null,
-  primary key (client_id)
-) engine=innodb ;
-
-create table if not exists  permission (
-  id int(11) not null auto_increment,
-  name varchar(512) default null,
-  primary key (id),
-  unique key name (name)
-) engine=innodb ;
-
-create table if not exists role (
-  id int(11) not null auto_increment,
-  name varchar(255) default null,
-  primary key (id),
-  unique key name (name)
-) engine=innodb ;
-
-create table if not exists  user (
-  id int(11) not null auto_increment,
-  username varchar(100) not null,
-  password varchar(1024) not null,
-  email varchar(1024) not null,
-  enabled tinyint(4) not null,
-  accountNonExpired tinyint(4) not null,
-  credentialsNonExpired tinyint(4) not null,
-  accountNonLocked tinyint(4) not null,
-  primary key (id),
-  unique key username (username)
-) engine=innodb ;
-
-
-create table  if not exists permission_role (
-  permission_id int(11) default null,
-  role_id int(11) default null,
-  key permission_id (permission_id),
-  key role_id (role_id),
-  constraint permission_role_ibfk_1 foreign key (permission_id) references permission (id),
-  constraint permission_role_ibfk_2 foreign key (role_id) references role (id)
-) engine=innodb ;
+INSERT INTO PERMISSION (NAME) VALUES 
+('can_create_user'),
+('can_update_user'),
+('can_read_user'),
+('can_delete_user');
 
 
 
-create table if not exists role_user (
-  role_id int(11) default null,
-  user_id int(11) default null,
-  key role_id (role_id),
-  key user_id (user_id),
-  constraint role_user_ibfk_1 foreign key (role_id) references role (id),
-  constraint role_user_ibfk_2 foreign key (user_id) references user (id)
-) engine=innodb ;
+		CREATE TABLE ROLE 
+		(ID INT PRIMARY KEY AUTO_INCREMENT, 
+		NAME VARCHAR(60) UNIQUE KEY);
 
--- token store
-create table if not exists oauth_client_token (
-  token_id VARCHAR(256),
-  token LONG VARBINARY,
-  authentication_id VARCHAR(256) PRIMARY KEY,
-  user_name VARCHAR(256),
-  client_id VARCHAR(256)
-);
 
-create table if not exists oauth_access_token (
-  token_id VARCHAR(256),
-  token LONG VARBINARY,
-  authentication_id VARCHAR(256) PRIMARY KEY,
-  user_name VARCHAR(256),
-  client_id VARCHAR(256),
-  authentication LONG VARBINARY,
-  refresh_token VARCHAR(256)
-);
+		INSERT INTO ROLE (NAME) VALUES 
+		('role_admin'),('role_user');
 
-create table if not exists oauth_refresh_token (
-  token_id VARCHAR(256),
-  token LONG VARBINARY,
-  authentication LONG VARBINARY
-);
 
-create table if not exists oauth_code (
-  code VARCHAR(256), authentication LONG VARBINARY
-);
+		
 
-create table if not exists oauth_approvals (
-	userId VARCHAR(256),
-	clientId VARCHAR(256),
-	scope VARCHAR(256),
-	status VARCHAR(10),
-	expiresAt TIMESTAMP,
-	lastModifiedAt TIMESTAMP
-);
+	CREATE TABLE PERMISSION_ROLE(
+    PERMISSION_ID INT,
+    FOREIGN KEY(PERMISSION_ID) REFERENCES PERMISSION(ID),
+    ROLE_ID INT,
+    FOREIGN KEY(ROLE_ID) REFERENCES ROLE(ID));
+    
+    INSERT INTO PERMISSION_ROLE (PERMISSION_ID, ROLE_ID) VALUES 
+    (1,1), /* can_create_user assigned to role_admin */
+    (2,1), /* can_update_user assigned to role_admin */
+    (3,1), /* can_read_user assigned to role_admin */
+    (4,1), /* can_delete_user assigned to role_admin */
 
+    (3,2);  /* can_read_user assigned to role_user */
+    
+
+
+    
+
+	CREATE TABLE USER (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    USERNAME VARCHAR(24) UNIQUE KEY NOT NULL,
+    PASSWORD VARCHAR(255) NOT NULL,
+    EMAIL VARCHAR(255) NOT NULL,
+    ENABLED BIT(1) NOT NULL,
+    ACCOUNT_EXPIRED BIT(1) NOT NULL,
+    CREDENTIALS_EXPIRED BIT(1) NOT NULL,
+    ACCOUNT_LOCKED BIT(1) NOT NULL);
+    
+    
+    
+
+
+	INSERT INTO USER (
+    USERNAME,PASSWORD,
+    EMAIL,ENABLED,ACCOUNT_EXPIRED,CREDENTIALS_EXPIRED,ACCOUNT_LOCKED) VALUES (
+    'admin','{bcrypt}$2a$10$EOs8VROb14e7ZnydvXECA.4LoIhPOoFHKvVF/iBZ/ker17Eocz4Vi',
+    'william@gmail.com',1,0,0,0),
+    ('user','{bcrypt}$2a$10$EOs8VROb14e7ZnydvXECA.4LoIhPOoFHKvVF/iBZ/ker17Eocz4Vi',
+    'john@gmail.com',1,0,0,0);
+    
+    
+    
+	CREATE TABLE ROLE_USER (ROLE_ID INT,FOREIGN KEY(ROLE_ID) REFERENCES ROLE(ID),
+    USER_ID INT, FOREIGN KEY(USER_ID) REFERENCES USER(ID));
+    
+    
+    INSERT INTO ROLE_USER (ROLE_ID, USER_ID)
+    VALUES 
+    (1, 1) /* role_admin assigned to admin user */,
+    (2, 2) /* role_user assigned to user user */ ;
