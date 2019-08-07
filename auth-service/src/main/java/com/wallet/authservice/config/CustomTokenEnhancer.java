@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import com.wallet.authservice.model.User;
 
 public class CustomTokenEnhancer extends JwtAccessTokenConverter {
+	
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
@@ -24,4 +25,5 @@ public class CustomTokenEnhancer extends JwtAccessTokenConverter {
 
 		return super.enhance(customAccessToken, authentication);
 	}
+	
 }

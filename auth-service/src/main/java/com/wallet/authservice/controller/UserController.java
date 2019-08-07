@@ -27,7 +27,6 @@ public class UserController {
 	}
 
 	@PostMapping
-	@PreAuthorize("#oauth2.hasScope('server')")
 	public UserDto createUser(@Valid @RequestBody UserRegistrationDto userRegistration) {
 		User savedUser = userService.create(toUser(userRegistration));
 		return toDto(savedUser);

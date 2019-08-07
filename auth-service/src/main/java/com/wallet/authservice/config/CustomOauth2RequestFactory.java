@@ -25,7 +25,6 @@ public class CustomOauth2RequestFactory extends DefaultOAuth2RequestFactory {
 		super(clientDetailsService);
 	}
 
-
 	@Override
 	public TokenRequest createTokenRequest(Map<String, String> requestParameters,
 			ClientDetails authenticatedClient) {
