@@ -43,8 +43,8 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 @EnableAuthorizationServer
 public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
 
-	@Value("${check-user-scopes}")
-	private Boolean checkUserScopes;
+	
+	private Boolean checkUserScopes=true;
 
 	@Autowired
 	private DataSource dataSource;
