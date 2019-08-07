@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String input) {
 		Optional<User> user = userRepository.findByUsername(input);
 
-		if (user.isPresent())
+		if (!user.isPresent())
 			throw new BadCredentialsException("Bad credentials");
 
 		new AccountStatusUserDetailsChecker().check(user.get());
