@@ -18,7 +18,7 @@ spring:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       ddl-auto: validate
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create
     generate-ddl: true
     show-sql: true
     
