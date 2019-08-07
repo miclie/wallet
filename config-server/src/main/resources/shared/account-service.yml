@@ -1,12 +1,3 @@
-security:
-  oauth2:
-    client:
-      clientId: account-service
-      clientSecret: 1234
-      accessTokenUri: http://localhost:8081/uaa/oauth/token
-      grant-type: client_credentials
-      scope: server
-
 server:
   servlet:
     context-path: /accounts
