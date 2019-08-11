@@ -1,5 +1,4 @@
 spring:
-  profiles: default
   application:
     name: auth-server
   cloud:
