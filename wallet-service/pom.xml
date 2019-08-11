@@ -103,16 +103,8 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
-
-		<!-- DEPENDENCIAS Projeto DTO -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -141,7 +133,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- Dependency for SpringFox 2.9.0 -->
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
@@ -172,7 +163,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<!-- Repository for SpringFox 2.9.0 -->
 		<repository>
 			<snapshots>
 				<enabled>false</enabled>
@@ -184,7 +174,6 @@
 	</repositories>
 
 	<pluginRepositories>
-		<!-- Plugin for SpringFox 2.9.0 -->
 		<pluginRepository>
 			<snapshots>
 				<enabled>false</enabled>

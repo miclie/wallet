@@ -25,7 +25,6 @@ server:
       ddl-auto: validate
 check-user-scopes: true
 
-#SLF4J
 logging:
   level:
     ROOT: ERROR

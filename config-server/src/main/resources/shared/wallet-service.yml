@@ -1,4 +1,3 @@
-
 server: 
   port: 9093 
   servlet: 
@@ -32,19 +31,7 @@ auth-server:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       ddl-auto: create
-#  jpa:
-#    database: H2
-#    show-sql: true
-#    properties:
-#      hibernate:
-#       format_sql: true
-#    hibernate:
-#      ddl-auto: create
-#  datasource:
-#    url: jdbc:h2:mem:got;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-#    username: sa
-#    password: sa
-#    driver-class-name: org.h2.Driver
+
   jackson:
     property-naming-strategy: SNAKE_CASE
     serialization:
@@ -59,8 +46,7 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-    
-    
+       
 
 eureka:
   instance:
