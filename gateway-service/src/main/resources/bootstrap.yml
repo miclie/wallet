@@ -1,8 +1,9 @@
 spring:
   application:
     name: gateway-service
+  profiles: default
   cloud:
-    config:
+   config:
       uri: http://localhost:8888
       fail-fast: true
       password: 1234

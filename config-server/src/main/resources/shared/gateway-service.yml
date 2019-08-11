@@ -1,18 +1,87 @@
-ribbon:
-  ReadTimeout: 20000
-  ConnectTimeout: 20000
+    
+server:
+  port: 9092
+
+  
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+    
+zuul:
+  ignoredServices: "*"
+  routes:
+    ms-got:  
+      sensitiveHeaders:
+      path: /**
+      serviceId: wallet-service  
+    auth-server:  
+      sensitiveHeaders:
+      path: /uaa/**
+      stripPrefix: false
+      serviceId: auth-server
+  
+eureka:
+  instance:
+    hostname: localhost
+    port: 9091
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  server:
+    wait-time-in-ms-when-sync-empty: 3000
+    
+logging:
+  level:
+    ROOT: ERROR
+    org.springframework.web: ERROR
+    com.enrico.microservices: DEBUG
+  file:  /tmp/logs/application.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+
+---
+
+spring:
+  profiles: docker
 
 zuul:
-  ignoredServices: '*'
-  host:
-    connect-timeout-millis: 20000
-    socket-timeout-millis: 20000
-
-    account-service:
-      path: /accounts/**
-      serviceId: account-service
-      stripPrefix: false
+  ignoredServices: "*"
+  routes:
+    ms-got:  
       sensitiveHeaders:
+      path: /**
+      serviceId: ms-got  
+  auth-server:  
+      sensitiveHeaders:
+      path: /uaa/**
+      stripPrefix: false
+      serviceId: auth-server
+  
+eureka:
+  instance:
+    hostname: eureka
+    port: 9091
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  server:
+    wait-time-in-ms-when-sync-empty: 3000
 
-server:
-  port: 8686
+
+logging:
+  level:
+    ROOT: ERROR
+    org.springframework.web: ERROR
+    com.enrico.microservices: DEBUG
+  file:  /tmp/logs/application.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+

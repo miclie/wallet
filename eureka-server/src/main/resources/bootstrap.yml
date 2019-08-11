@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: eureka-server 
+  profiles: default
+  cloud:
+   config:
+      uri: http://localhost:8888
+      fail-fast: true
+      password: 1234
+      username: user
