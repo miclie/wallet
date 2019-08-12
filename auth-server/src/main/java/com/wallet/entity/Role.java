@@ -1,4 +1,4 @@
-package com.wallet.auth.entity;
+package com.wallet.entity;
 
 import java.util.List;
 

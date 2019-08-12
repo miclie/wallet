@@ -1,6 +1,7 @@
-package com.wallet.auth.entity;
+package com.wallet.entity;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class User extends BaseIdEntity implements UserDetails {
 
 	@Column(name = "credentials_expired")
 	private boolean credentialsNonExpired;
-
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "role_user", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {

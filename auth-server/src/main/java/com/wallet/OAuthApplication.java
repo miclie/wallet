@@ -1,4 +1,4 @@
-package com.wallet.auth;
+package com.wallet;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

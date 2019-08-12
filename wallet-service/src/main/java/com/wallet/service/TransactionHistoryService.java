@@ -42,15 +42,6 @@ public class TransactionHistoryService {
 	@Autowired
 	private Validator validator;
 
-	@Transactional(readOnly = true)
-	public List<Deposit> listAll() {
-		try (Stream<DepositEntity> stream = depositRepository.streamAll()) {
-			return stream.map(this::toDto).collect(Collectors.toList());
-		} catch (Exception ex) {
-			LOGGER.error("Unable to get all houses", ex);
-			throw new InternalServerException();
-		}
-	}
 
 	@Transactional(readOnly = true)
 	public Deposit findById(Long id) {
@@ -68,36 +59,9 @@ public class TransactionHistoryService {
 		}
 	}
 
-	@Transactional(readOnly = false)
-	public Deposit addNew(Deposit dto) {
-
-		Set<ConstraintViolation<Deposit>> violations = validator.validate(dto);
-		if (violations.size() > 0) {
-			throw new BadRequestException();
-		}
-
-		boolean exists = false;
-		try {
-			exists = depositRepository.existsByName(dto.getName());
-		} catch (Exception ex) {
-			LOGGER.error("Unable to check if house exists", ex);
-			throw new InternalServerException();
-		}
-
-		if (exists) {
-			throw new ConflictException();
-		}
-		try {
-			DepositEntity entity = depositRepository.save(new DepositEntity(dto));
-			return toDto(entity);
-		} catch (Exception ex) {
-			LOGGER.error("Unable to add new house", ex);
-			throw new InternalServerException();
-		}
-	}
 
 	public Deposit toDto(DepositEntity entity) {
-		return new Deposit(entity.getUser().getUsername())
+		return new Deposit(entity.getUser().getUsername(),entity.getRemaining(),entity.getCredit())
 				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne((entity.getId()))).withSelfRel())
 				.withLink(linkTo(methodOn(TransactionHistoryController.class).getHouseMembers(entity.getId()))
 						.withRel("members"));

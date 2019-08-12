@@ -1,6 +1,7 @@
 package com.wallet.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wallet.entity.User;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,17 +25,18 @@ public class Deposit extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotNull
-	@Size(min = 1, max = 100)
-	@JsonProperty(value = "name")
-	@Pattern(regexp = "[a-zA-Z0-9\\s]+")
-	@ApiModelProperty(notes = "The name of the person", required = true, allowEmptyValue = false, example = "Cersei Lannister")
-	private String name;
+	private String username;
+
+	private BigDecimal remaining;
+
+	private BigDecimal credit;
 	
 	@JsonCreator
-	public Deposit(@JsonProperty("name") String name) {
+	public Deposit(@JsonProperty("username") String username,@JsonProperty("remaining") BigDecimal remaining, @JsonProperty("credit") BigDecimal credit) {
 		super();
-		this.name = name;
+		this.username=username;
+		this.remaining=remaining;
+		this.credit=credit;
 	}
 	
 	public Deposit withLink(Link link) {
@@ -45,13 +48,31 @@ public class Deposit extends ResourceSupport implements Serializable {
 		this.add(new Link(href, rel));
 		return this;
 	}
-	
-	public String getName() {
-		return name;
+
+	public String getUsername() {
+		return username;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
+
+	public BigDecimal getRemaining() {
+		return remaining;
+	}
+
+	public void setRemaining(BigDecimal remaining) {
+		this.remaining = remaining;
+	}
+
+	public BigDecimal getCredit() {
+		return credit;
+	}
+
+	public void setCredit(BigDecimal credit) {
+		this.credit = credit;
+	}
+	
+	
 	
 }

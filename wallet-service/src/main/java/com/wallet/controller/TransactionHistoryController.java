@@ -21,10 +21,6 @@ public class TransactionHistoryController {
 	@Autowired
 	private DepositService depositService;
 
-	@GetMapping
-	public List<Deposit> getAll() {
-		return depositService.listAll();
-	}
 
 	@PreAuthorize("hasAuthority('role_admin')")
 	@GetMapping(path = "/{id}")

@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.wallet.auth.entity.User;
-import com.wallet.auth.repository.UserRepository;
+import com.wallet.entity.User;
+import com.wallet.repository.UserRepository;
 
 @Service(value = "userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
