@@ -15,7 +15,7 @@ endpoints:
 zuul:
   ignoredServices: "*"
   routes:
-    ms-got:  
+    wallet-service:  
       sensitiveHeaders:
       path: /**
       serviceId: wallet-service  
@@ -39,7 +39,7 @@ logging:
   level:
     ROOT: ERROR
     org.springframework.web: ERROR
-    com.enrico.microservices: DEBUG
+    com.wallet.auth: DEBUG
   file:  /tmp/logs/application.log
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

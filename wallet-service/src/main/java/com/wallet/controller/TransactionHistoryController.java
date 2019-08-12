@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wallet.dto.Deposit;
+import com.wallet.entity.DepositEntity;
 import com.wallet.service.DepositService;
 
 @RestController
@@ -32,8 +33,8 @@ public class TransactionHistoryController {
 	}
 	
 	@GetMapping(path = "/{id}/members")
-	public List<Deposit> getHouseMembers(@PathVariable("id") Long houseId) {
-		return depositService.listByHouseId(houseId);
+	public DepositEntity getHouseMembers(@PathVariable("id") Long houseId) {
+		return depositService.listById(houseId);
 	}
 
 }

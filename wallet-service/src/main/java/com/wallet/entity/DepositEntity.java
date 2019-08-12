@@ -42,11 +42,7 @@ public class DepositEntity extends BaseEntity<Long> {
 	@Column(name = "name", nullable = false, length = 100)
 	private String name;
 
-	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "house_id", nullable = false, updatable = true, foreignKey = @ForeignKey(name = "fk_person_house"))
-	private DepositEntity house;
-
+	
 	public DepositEntity(Deposit dto) {
 		super();
 		this.name = dto.getName();

@@ -104,13 +104,8 @@ public class TransactionHistoryService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Deposit> listByHouseId(Long houseId) {
-		try (Stream<DepositEntity> stream = depositRepository.findByHouseId(houseId).stream()) {
-			return stream.map(this::toDto).collect(Collectors.toList());
-		} catch (Exception ex) {
-			LOGGER.error("Unable to get persons from house", ex);
-			throw new InternalServerException();
-		}
+	public DepositEntity listByHouseId(Long id) {
+		return depositRepository.findById(id).get();
 	}
 
 }

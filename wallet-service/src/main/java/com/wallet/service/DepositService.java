@@ -62,13 +62,8 @@ public class DepositService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Deposit> listByHouseId(Long houseId) {
-		try (Stream<DepositEntity> stream = depositRepository.findByHouseId(houseId).stream()) {
-			return stream.map(this::toDto).collect(Collectors.toList());
-		} catch (Exception ex) {
-			LOGGER.error("Unable to get persons from house", ex);
-			throw new InternalServerException();
-		}
+	public DepositEntity listById(Long id) {
+		return depositRepository.findById(id).get();
 	}
 
 	@Transactional(readOnly = true)
@@ -95,44 +90,18 @@ public class DepositService {
 			throw new BadRequestException();
 		}
 
-		if (!dto.hasLink("house") || dto.getLink("house").getHref() == null) {
-			throw new BadRequestException();
-		}
-
-		ControllerUriResolver cr = ControllerUriResolver.on(methodOn(DepositController.class).getOne(null));
-		String houseId = cr.resolve(dto.getLink("house").getHref(), "house").orElseThrow(BadRequestException::new);
-
-		boolean personExists = false;
-		Optional<DepositEntity> houseEntity = null;
-		try {
-			personExists = transactionHistoryRepository.existsByName(dto.getName());
-			houseEntity = depositRepository.findById(Long.parseLong(houseId));
-		} catch (Exception ex) {
-			LOGGER.error("Unable to check if person exists", ex);
-			throw new InternalServerException();
-		}
-
-		if (!houseEntity.isPresent()) {
-			throw new BadRequestException();
-		}
-
-		if (personExists) {
-			throw new ConflictException();
-		}
-
 		try {
 			DepositEntity person = depositRepository.save(new DepositEntity(dto));
 			return toDto(person);
 		} catch (Exception ex) {
-			LOGGER.error("Unable to add new person", ex);
-			throw new InternalServerException();
+			ex.printStackTrace();
 		}
+		return null;
 	}
 
 	public Deposit toDto(DepositEntity entity) {
 		return new Deposit(entity.getName())
 				.withLink(linkTo(methodOn(DepositController.class).getOne((entity.getId()))).withSelfRel())
-				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne(entity.getHouse().getId()))
-						.withRel("house"));
+				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne(entity.getId())).withRel("house"));
 	}
 }
