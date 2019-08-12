@@ -6,8 +6,10 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wallet.auth.entity.User;
 import com.wallet.entity.DepositEntity;
 import com.wallet.entity.TransactionHistoryEntity;
 
@@ -22,5 +24,8 @@ public interface DepositEntityRepository extends JpaRepository<DepositEntity, Lo
 	
 	@Transactional(readOnly = true)
 	Optional<DepositEntity> findById(Long houseId);
+
+	@Transactional(readOnly = true)
+	Optional<DepositEntity> findByUser(UserDetails user);
 
 }

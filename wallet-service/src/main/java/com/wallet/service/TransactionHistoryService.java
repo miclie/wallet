@@ -97,7 +97,7 @@ public class TransactionHistoryService {
 	}
 
 	public Deposit toDto(DepositEntity entity) {
-		return new Deposit(entity.getName())
+		return new Deposit(entity.getUser().getUsername())
 				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne((entity.getId()))).withSelfRel())
 				.withLink(linkTo(methodOn(TransactionHistoryController.class).getHouseMembers(entity.getId()))
 						.withRel("members"));

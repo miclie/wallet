@@ -29,7 +29,7 @@ public class TransactionHistoryController {
 	@PreAuthorize("hasAuthority('role_admin')")
 	@GetMapping(path = "/{id}")
 	public Deposit getOne(@PathVariable("id") Long id) {
-		return depositService.findById(id);
+		return null;//depositService.findById(id);
 	}
 	
 	@GetMapping(path = "/{id}/members")

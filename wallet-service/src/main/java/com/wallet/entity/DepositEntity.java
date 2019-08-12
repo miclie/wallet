@@ -1,5 +1,7 @@
 package com.wallet.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.wallet.auth.entity.User;
 import com.wallet.dto.Deposit;
 
 import lombok.Data;
@@ -35,17 +38,18 @@ public class DepositEntity extends BaseEntity<Long> {
 	@Access(AccessType.PROPERTY)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@ManyToOne
+	private User user;
 
-	@NotNull
-	@Size(min = 1, max = 100)
-	@Pattern(regexp = "[a-zA-Z0-9\\s]+")
-	@Column(name = "name", nullable = false, length = 100)
-	private String name;
+	private BigDecimal remaining;
+	
+	private BigDecimal credit;
 
 	
 	public DepositEntity(Deposit dto) {
 		super();
-		this.name = dto.getName();
+		//this.name = dto.getName();
 	}
 
 }

@@ -9,6 +9,8 @@ management:
   security:
     enabled: false  
 
+check-user-scopes: true
+
 auth-server:
   url: http://localhost:9999
  

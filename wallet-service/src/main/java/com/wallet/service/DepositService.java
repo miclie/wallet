@@ -6,6 +6,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,9 +17,12 @@ import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wallet.auth.entity.User;
 import com.wallet.controller.DepositController;
 import com.wallet.controller.TransactionHistoryController;
 import com.wallet.dto.Deposit;
@@ -46,11 +50,6 @@ public class DepositService {
 	@Autowired
 	private Validator validator;
 
-	@PostConstruct
-	public void populate() {
-		LOGGER.info("People populated");
-	}
-
 	@Transactional(readOnly = true)
 	public List<Deposit> listAll() {
 		try (Stream<DepositEntity> stream = depositRepository.streamAll()) {
@@ -67,10 +66,10 @@ public class DepositService {
 	}
 
 	@Transactional(readOnly = true)
-	public Deposit findById(Long id) {
+	public Deposit findByUser(UserDetails user) {
 		Optional<DepositEntity> entity = null;
 		try {
-			entity = depositRepository.findById(id);
+			entity = depositRepository.findByUser(user);
 		} catch (Exception ex) {
 			LOGGER.error("Unable to get house by id", ex);
 			throw new InternalServerException();
@@ -82,8 +81,9 @@ public class DepositService {
 		}
 	}
 
+	@Async
 	@Transactional(readOnly = false)
-	public Deposit addNew(Deposit dto) {
+	public CompletableFuture<Deposit> addNew(Deposit dto) {
 
 		Set<ConstraintViolation<Deposit>> violations = validator.validate(dto);
 		if (violations.size() > 0) {
@@ -92,7 +92,7 @@ public class DepositService {
 
 		try {
 			DepositEntity person = depositRepository.save(new DepositEntity(dto));
-			return toDto(person);
+			return CompletableFuture.completedFuture(toDto(person));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -100,8 +100,8 @@ public class DepositService {
 	}
 
 	public Deposit toDto(DepositEntity entity) {
-		return new Deposit(entity.getName())
-				.withLink(linkTo(methodOn(DepositController.class).getOne((entity.getId()))).withSelfRel())
+		return new Deposit(entity.getUser().getUsername())
+				.withLink(linkTo(methodOn(DepositController.class).getOne((entity.toString()))).withSelfRel())
 				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne(entity.getId())).withRel("house"));
 	}
 }
