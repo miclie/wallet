@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
+import javax.security.auth.login.AccountNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
@@ -19,13 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.controller.DepositController;
-import com.wallet.controller.TransactionHistoryController;
 import com.wallet.dto.Deposit;
 import com.wallet.entity.DepositEntity;
+import com.wallet.entity.TransactionHistoryEntity;
 import com.wallet.entity.User;
 import com.wallet.exception.BadRequestException;
-import com.wallet.exception.InternalServerException;
-import com.wallet.exception.ResourceNotFoundException;
+import com.wallet.exception.NoUserFoundException;
 import com.wallet.repository.DepositEntityRepository;
 import com.wallet.repository.TransactionHistoryEntityRepository;
 
@@ -51,45 +51,62 @@ public class DepositService {
 		return depositRepository.findById(id).get();
 	}
 
-	@Transactional(readOnly = true)
-	public Deposit findByUserName(String userName) {
-		Optional<DepositEntity> entity = null;
-		try {
-			User user = (User) userDetailsService.loadUserByUsername(userName);
-			entity = depositRepository.findByUser(user);
-		} catch (Exception ex) {
-			LOGGER.error("Unable to get house by id", ex);
-			throw new InternalServerException();
-		}
-		if (entity.isPresent()) {
-			return toDto(entity.get());
-		} else {
-			throw new ResourceNotFoundException();
-		}
-	}
-
 	@Async
 	@Transactional(readOnly = false)
-	public CompletableFuture<Deposit> addNew(String username, Deposit dto) {
+	public CompletableFuture<Deposit> createNewAccount(String username, Deposit dto) throws NoUserFoundException {
 
 		Set<ConstraintViolation<Deposit>> violations = validator.validate(dto);
 		if (violations.size() > 0) {
 			throw new BadRequestException();
 		}
 		User user = (User) userDetailsService.loadUserByUsername(username);
+		if (user == null) {
+			throw new NoUserFoundException();
+		}
 		dto.setUsername(username);
+
 		try {
-			DepositEntity person = depositRepository.save(new DepositEntity(user, dto));
-			return CompletableFuture.completedFuture(toDto(person));
+			DepositEntity account = depositRepository.save(new DepositEntity(user, dto));
+			TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity();
+
+			transactionHistoryEntity.setId(dto.getTransactionId());
+			transactionHistoryEntity.setDeposit(account);
+			transactionHistoryEntity.setUser(user);
+			transactionHistoryRepository.save(transactionHistoryEntity);
+
+			return CompletableFuture.completedFuture(toDto(account, dto.getTransactionId()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return null;
 	}
 
-	public Deposit toDto(DepositEntity entity) {
-		return new Deposit(entity.getUser().getUsername(), entity.getRemaining(), entity.getCredit())
-				.withLink(linkTo(methodOn(DepositController.class).getOne((entity.toString()))).withSelfRel())
-				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne(entity.getId())).withRel("house"));
+	public Deposit toDto(DepositEntity entity, String transactionId) throws AccountNotFoundException {
+		return new Deposit(entity.getUser().getUsername(), entity.getRemaining(), entity.getCredit(), transactionId)
+				.withLink(linkTo(methodOn(DepositController.class).getAccount(entity.getId())).withRel("account"));
+	}
+
+	public Deposit toDto(DepositEntity entity) throws AccountNotFoundException {
+		return new Deposit(entity.getUser().getUsername(), entity.getRemaining(), entity.getCredit(), "")
+				.withLink(linkTo(methodOn(DepositController.class).getAccount(entity.getId())).withRel("account"));
+	}
+
+	@Async
+	@Transactional(readOnly = true)
+	public CompletableFuture<Deposit> getAccount(String username) throws AccountNotFoundException {
+		User user = (User) userDetailsService.loadUserByUsername(username);
+		Optional<DepositEntity> accountOptional = depositRepository.findByUser(user);
+		if (accountOptional.isPresent()) {
+			return CompletableFuture.completedFuture(toDto(accountOptional.get()));
+		} else {
+			throw new AccountNotFoundException();
+		}
+	}
+
+	@Async
+	@Transactional(readOnly = true)
+	public CompletableFuture<Deposit> getAccountById(Long id) throws AccountNotFoundException {
+		Optional<DepositEntity> depositEntityOptional = depositRepository.findById(id);
+		return CompletableFuture.completedFuture(toDto(depositEntityOptional.get()));
 	}
 }

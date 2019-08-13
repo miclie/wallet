@@ -5,21 +5,17 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wallet.entity.TransactionHistoryEntity;
+import com.wallet.entity.User;
 
-public interface TransactionHistoryEntityRepository extends JpaRepository<TransactionHistoryEntity, Long> {
-
-	@Transactional(readOnly = true)
-	Optional<TransactionHistoryEntity> findById(Long id);
+public interface TransactionHistoryEntityRepository extends JpaRepository<TransactionHistoryEntity, String> {
 
 	@Transactional(readOnly = true)
-	@Query("select e from TransactionHistoryEntity e")
-	Stream<TransactionHistoryEntity> streamAll();
+	Optional<TransactionHistoryEntity> findById(String id);
 
 	@Transactional(readOnly = true)
-	boolean existsByName(String name);
+	List<TransactionHistoryEntity>  findByUser(User user);
 
 }

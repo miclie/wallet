@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "deposit")
 public class DepositEntity extends BaseEntity<Long> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7731294694456088735L;
 
 	@Id
 	@Access(AccessType.PROPERTY)

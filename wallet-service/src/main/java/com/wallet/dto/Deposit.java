@@ -14,11 +14,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wallet.entity.DepositEntity;
 import com.wallet.entity.User;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @ApiModel(description = "Represents a person within the Game of Thrones fantasy world")
 @JsonInclude(Include.NON_NULL)
 public class Deposit extends ResourceSupport implements Serializable {
@@ -27,18 +30,22 @@ public class Deposit extends ResourceSupport implements Serializable {
 
 	private String username;
 
+	private String transactionId;
+
 	private BigDecimal remaining;
 
 	private BigDecimal credit;
-	
+
 	@JsonCreator
-	public Deposit(@JsonProperty("username") String username,@JsonProperty("remaining") BigDecimal remaining, @JsonProperty("credit") BigDecimal credit) {
+	public Deposit(@JsonProperty("username") String username, @JsonProperty("remaining") BigDecimal remaining,
+			@JsonProperty("credit") BigDecimal credit, @JsonProperty("transactionId") String transactionId) {
 		super();
-		this.username=username;
-		this.remaining=remaining;
-		this.credit=credit;
+		this.username = username;
+		this.remaining = remaining;
+		this.credit = credit;
+		this.transactionId = transactionId;
 	}
-	
+
 	public Deposit withLink(Link link) {
 		this.add(link);
 		return this;
@@ -72,7 +79,13 @@ public class Deposit extends ResourceSupport implements Serializable {
 	public void setCredit(BigDecimal credit) {
 		this.credit = credit;
 	}
-	
-	
-	
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
 }

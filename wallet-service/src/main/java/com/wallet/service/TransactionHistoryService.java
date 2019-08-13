@@ -3,6 +3,7 @@ package com.wallet.service;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wallet.controller.TransactionHistoryController;
 import com.wallet.dto.Deposit;
+import com.wallet.dto.Transaction;
 import com.wallet.entity.DepositEntity;
+import com.wallet.entity.TransactionHistoryEntity;
+import com.wallet.entity.User;
 import com.wallet.exception.BadRequestException;
 import com.wallet.exception.ConflictException;
 import com.wallet.exception.InternalServerException;
@@ -34,42 +38,34 @@ public class TransactionHistoryService {
 	private static Logger LOGGER = LoggerFactory.getLogger(TransactionHistoryService.class);
 
 	@Autowired
-	private DepositEntityRepository depositRepository;
-
-	@Autowired
 	private TransactionHistoryEntityRepository transactionHistoryRepository;
 
-	@Autowired
-	private Validator validator;
-
-
 	@Transactional(readOnly = true)
-	public Deposit findById(Long id) {
-		Optional<DepositEntity> entity = null;
-		try {
-			entity = depositRepository.findById(id);
-		} catch (Exception ex) {
-			LOGGER.error("Unable to get house by id", ex);
-			throw new InternalServerException();
-		}
-		if (entity.isPresent()) {
-			return toDto(entity.get());
-		} else {
-			throw new ResourceNotFoundException();
-		}
-	}
+	public List<Transaction> findByUser(User user) {
 
+		List<Transaction> transactionDtoList = new ArrayList<Transaction>();
+		List<TransactionHistoryEntity> transactionList = transactionHistoryRepository.findByUser(user);
+		transactionList.forEach(p -> {
+			transactionDtoList.add(toDto(p));
+		});
 
-	public Deposit toDto(DepositEntity entity) {
-		return new Deposit(entity.getUser().getUsername(),entity.getRemaining(),entity.getCredit())
-				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne((entity.getId()))).withSelfRel())
-				.withLink(linkTo(methodOn(TransactionHistoryController.class).getHouseMembers(entity.getId()))
-						.withRel("members"));
+		return transactionDtoList;
+
 	}
 
 	@Transactional(readOnly = true)
-	public DepositEntity listByHouseId(Long id) {
-		return depositRepository.findById(id).get();
+	public Transaction findById(String id) {
+
+		TransactionHistoryEntity transactionHistoryEntity = transactionHistoryRepository.findById(id).get();
+
+		return toDto(transactionHistoryEntity);
+
+	}
+
+	public Transaction toDto(TransactionHistoryEntity entity) {
+		return new Transaction(entity)
+				.withLink(linkTo(methodOn(TransactionHistoryController.class).getOne(entity.getId())).withSelfRel()
+						.withRel("transaction"));
 	}
 
 }
