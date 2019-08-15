@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.controller.TransactionHistoryController;
 import com.wallet.dto.Deposit;
 import com.wallet.dto.Transaction;
@@ -29,11 +30,15 @@ import com.wallet.exception.BadRequestException;
 import com.wallet.exception.ConflictException;
 import com.wallet.exception.InternalServerException;
 import com.wallet.exception.ResourceNotFoundException;
+import com.wallet.exception.TransactionNumberAlreadyExists;
 import com.wallet.repository.DepositEntityRepository;
 import com.wallet.repository.TransactionHistoryEntityRepository;
 
 @Service
 public class TransactionHistoryService {
+
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
 
 	private static Logger LOGGER = LoggerFactory.getLogger(TransactionHistoryService.class);
 
@@ -41,7 +46,9 @@ public class TransactionHistoryService {
 	private TransactionHistoryEntityRepository transactionHistoryRepository;
 
 	@Transactional(readOnly = true)
-	public List<Transaction> findByUser(User user) {
+	public List<Transaction> findByUser(String username) {
+
+		User user = (User) userDetailsService.loadUserByUsername(username);
 
 		List<Transaction> transactionDtoList = new ArrayList<Transaction>();
 		List<TransactionHistoryEntity> transactionList = transactionHistoryRepository.findByUser(user);
@@ -56,10 +63,22 @@ public class TransactionHistoryService {
 	@Transactional(readOnly = true)
 	public Transaction findById(String id) {
 
-		TransactionHistoryEntity transactionHistoryEntity = transactionHistoryRepository.findById(id).get();
+		Optional<TransactionHistoryEntity> transactionOptional = transactionHistoryRepository.findById(id);
+		if (transactionOptional.isPresent()) {
+			return toDto(transactionOptional.get());
+		}
 
-		return toDto(transactionHistoryEntity);
+		return null;
 
+	}
+
+	public TransactionHistoryEntity saveTransactionHistory(DepositEntity account, Deposit dto, User user) {
+
+		TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity();
+		transactionHistoryEntity.setId(dto.getTransactionId());
+		transactionHistoryEntity.setDeposit(account);
+		transactionHistoryEntity.setUser(user);
+		return transactionHistoryRepository.save(transactionHistoryEntity);
 	}
 
 	public Transaction toDto(TransactionHistoryEntity entity) {

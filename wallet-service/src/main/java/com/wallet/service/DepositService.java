@@ -3,6 +3,7 @@ package com.wallet.service;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -21,13 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.controller.DepositController;
 import com.wallet.dto.Deposit;
+import com.wallet.dto.Transaction;
 import com.wallet.entity.DepositEntity;
-import com.wallet.entity.TransactionHistoryEntity;
 import com.wallet.entity.User;
+import com.wallet.exception.AccountBalanceCannotBeLessThanZeroException;
 import com.wallet.exception.BadRequestException;
 import com.wallet.exception.NoUserFoundException;
+import com.wallet.exception.TransactionNumberAlreadyExists;
 import com.wallet.repository.DepositEntityRepository;
-import com.wallet.repository.TransactionHistoryEntityRepository;
 
 @Service
 public class DepositService {
@@ -38,7 +40,7 @@ public class DepositService {
 	private DepositEntityRepository depositRepository;
 
 	@Autowired
-	private TransactionHistoryEntityRepository transactionHistoryRepository;
+	private TransactionHistoryService transactionHistoryService;
 
 	@Autowired
 	private Validator validator;
@@ -53,32 +55,18 @@ public class DepositService {
 
 	@Async
 	@Transactional(readOnly = false)
-	public CompletableFuture<Deposit> createNewAccount(String username, Deposit dto) throws NoUserFoundException {
+	public CompletableFuture<Deposit> createNewAccount(String username, Deposit dto)
+			throws NoUserFoundException, AccountNotFoundException, TransactionNumberAlreadyExists {
 
-		Set<ConstraintViolation<Deposit>> violations = validator.validate(dto);
-		if (violations.size() > 0) {
-			throw new BadRequestException();
-		}
 		User user = (User) userDetailsService.loadUserByUsername(username);
-		if (user == null) {
-			throw new NoUserFoundException();
-		}
-		dto.setUsername(username);
 
-		try {
-			DepositEntity account = depositRepository.save(new DepositEntity(user, dto));
-			TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity();
+		checkConstraints(dto);
+		checkConstraints(dto.getTransactionId(), username, user);
 
-			transactionHistoryEntity.setId(dto.getTransactionId());
-			transactionHistoryEntity.setDeposit(account);
-			transactionHistoryEntity.setUser(user);
-			transactionHistoryRepository.save(transactionHistoryEntity);
+		DepositEntity accountEntity = depositRepository.save(new DepositEntity(user, dto));
+		transactionHistoryService.saveTransactionHistory(accountEntity, dto, user);
+		return CompletableFuture.completedFuture(toDto(accountEntity, dto.getTransactionId()));
 
-			return CompletableFuture.completedFuture(toDto(account, dto.getTransactionId()));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
 	}
 
 	public Deposit toDto(DepositEntity entity, String transactionId) throws AccountNotFoundException {
@@ -108,5 +96,86 @@ public class DepositService {
 	public CompletableFuture<Deposit> getAccountById(Long id) throws AccountNotFoundException {
 		Optional<DepositEntity> depositEntityOptional = depositRepository.findById(id);
 		return CompletableFuture.completedFuture(toDto(depositEntityOptional.get()));
+	}
+
+	@Async
+	@Transactional(readOnly = false)
+	public CompletableFuture<Deposit> updateAccount(String username, Deposit deposit)
+			throws NoUserFoundException, TransactionNumberAlreadyExists, AccountNotFoundException {
+
+		User user = (User) userDetailsService.loadUserByUsername(username);
+
+		checkConstraints(deposit);
+		checkConstraints(deposit.getTransactionId(), username, user);
+
+		Optional<DepositEntity> accountOptional = depositRepository.findByUser(user);
+		if (!accountOptional.isPresent()) {
+			throw new AccountNotFoundException();
+		}
+		DepositEntity accountUpdated = accountOptional.get();
+		accountUpdated.setCredit(deposit.getCredit());
+		accountUpdated.setRemaining(deposit.getRemaining());
+		depositRepository.save(accountUpdated);
+		return CompletableFuture.completedFuture(toDto(accountUpdated, deposit.getTransactionId()));
+	}
+
+	public void checkConstraints(Deposit dto) {
+		Set<ConstraintViolation<Deposit>> violations = validator.validate(dto);
+		if (violations.size() > 0) {
+			throw new BadRequestException();
+		}
+
+	}
+
+	public void checkConstraints(String transactionId, String username, User user)
+			throws NoUserFoundException, TransactionNumberAlreadyExists {
+
+		if (user == null) {
+			throw new NoUserFoundException();
+		}
+
+		Transaction transaction = transactionHistoryService.findById(transactionId);
+		if (transaction != null) {
+			throw new TransactionNumberAlreadyExists();
+		}
+	}
+
+	@Async
+	@Transactional(readOnly = false)
+	public CompletableFuture<Deposit> addMoneyToAccount(String username, BigDecimal amount, String transactionId)
+			throws NoUserFoundException, TransactionNumberAlreadyExists, AccountNotFoundException {
+		User user = (User) userDetailsService.loadUserByUsername(username);
+		checkConstraints(transactionId, username, user);
+		Optional<DepositEntity> accountOptional = depositRepository.findByUser(user);
+		if (!accountOptional.isPresent()) {
+			throw new AccountNotFoundException();
+		}
+		DepositEntity accountUpdated = accountOptional.get();
+		accountUpdated.setRemaining(accountUpdated.getRemaining().add(amount));
+		depositRepository.save(accountUpdated);
+		return CompletableFuture.completedFuture(toDto(accountUpdated, transactionId));
+	}
+
+	@Async
+	@Transactional(readOnly = false)
+	public CompletableFuture<Deposit> spendMoneyFromAccount(String username, BigDecimal amount, String transactionId)
+			throws NoUserFoundException, TransactionNumberAlreadyExists, AccountBalanceCannotBeLessThanZeroException,
+			AccountNotFoundException {
+		User user = (User) userDetailsService.loadUserByUsername(username);
+
+		checkConstraints(transactionId, username, user);
+
+		Optional<DepositEntity> accountOptional = depositRepository.findByUser(user);
+		if (!accountOptional.isPresent()) {
+			throw new AccountNotFoundException();
+		}
+		DepositEntity accountUpdated = accountOptional.get();
+		accountUpdated.setRemaining(accountUpdated.getRemaining().subtract(amount));
+		if (accountUpdated.getRemaining().compareTo(BigDecimal.ZERO) == -1) {
+			throw new AccountBalanceCannotBeLessThanZeroException();
+		}
+		depositRepository.save(accountUpdated);
+		return CompletableFuture.completedFuture(toDto(accountUpdated, transactionId));
+
 	}
 }

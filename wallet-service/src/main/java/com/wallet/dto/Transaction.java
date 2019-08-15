@@ -32,8 +32,8 @@ public class Transaction extends ResourceSupport implements Serializable {
 		super();
 		this.id = entity.getId();
 		this.user = new UserDto(entity.getUser());
-		this.deposit.setCredit(entity.getDeposit().getCredit());
-		this.deposit.setRemaining(entity.getDeposit().getRemaining());
+		//this.deposit.setCredit(entity.getDeposit().getCredit());
+		//this.deposit.setRemaining(entity.getDeposit().getRemaining());
 
 	}
 
