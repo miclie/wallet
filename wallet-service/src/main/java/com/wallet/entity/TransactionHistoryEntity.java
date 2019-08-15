@@ -30,6 +30,6 @@ public class TransactionHistoryEntity extends BaseEntity<Long> {
 	private User user;
 
 	@ManyToOne
-	private DepositEntity deposit;
+	private AccountEntity account;
 
 }

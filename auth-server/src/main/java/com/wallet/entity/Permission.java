@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class Permission extends BaseIdEntity {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8746303638436216011L;
 
 	private String name;
 

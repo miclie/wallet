@@ -21,19 +21,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-
-
 @Data
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseIdEntity implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = -984160415989599291L;
 	private String email;
 	private String username;
 	private String password;
+
+	@Column(name = "enabled")
 	private boolean enabled;
 
 	@Column(name = "account_locked")
@@ -44,7 +44,7 @@ public class User extends BaseIdEntity implements UserDetails {
 
 	@Column(name = "credentials_expired")
 	private boolean credentialsNonExpired;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "role_user", joinColumns = {
 			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {

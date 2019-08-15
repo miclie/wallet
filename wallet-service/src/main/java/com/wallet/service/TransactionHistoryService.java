@@ -6,12 +6,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +17,9 @@ import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.controller.TransactionHistoryController;
 import com.wallet.dto.Deposit;
 import com.wallet.dto.Transaction;
-import com.wallet.entity.DepositEntity;
+import com.wallet.entity.AccountEntity;
 import com.wallet.entity.TransactionHistoryEntity;
 import com.wallet.entity.User;
-import com.wallet.exception.BadRequestException;
-import com.wallet.exception.ConflictException;
-import com.wallet.exception.InternalServerException;
-import com.wallet.exception.ResourceNotFoundException;
-import com.wallet.exception.TransactionNumberAlreadyExists;
-import com.wallet.repository.DepositEntityRepository;
 import com.wallet.repository.TransactionHistoryEntityRepository;
 
 @Service
@@ -72,11 +60,11 @@ public class TransactionHistoryService {
 
 	}
 
-	public TransactionHistoryEntity saveTransactionHistory(DepositEntity account, Deposit dto, User user) {
+	public TransactionHistoryEntity saveTransactionHistory(AccountEntity account, Deposit dto, User user) {
 
 		TransactionHistoryEntity transactionHistoryEntity = new TransactionHistoryEntity();
 		transactionHistoryEntity.setId(dto.getTransactionId());
-		transactionHistoryEntity.setDeposit(account);
+		transactionHistoryEntity.setAccount(account);
 		transactionHistoryEntity.setUser(user);
 		return transactionHistoryRepository.save(transactionHistoryEntity);
 	}

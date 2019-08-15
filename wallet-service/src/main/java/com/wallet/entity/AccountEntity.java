@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "deposit")
-public class DepositEntity extends BaseEntity<Long> {
+@Table(name = "account")
+public class AccountEntity extends BaseEntity<Long> {
 
 	private static final long serialVersionUID = 7731294694456088735L;
 
@@ -38,7 +38,7 @@ public class DepositEntity extends BaseEntity<Long> {
 
 	private BigDecimal credit;
 
-	public DepositEntity(User user,Deposit dto) {
+	public AccountEntity(User user,Deposit dto) {
 		super();
 		this.user = user;
 		this.remaining = dto.getRemaining();

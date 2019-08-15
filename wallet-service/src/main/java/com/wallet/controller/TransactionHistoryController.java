@@ -20,23 +20,24 @@ import com.wallet.dto.Transaction;
 import com.wallet.service.TokenDecryptionService;
 import com.wallet.service.TransactionHistoryService;
 
+import io.swagger.annotations.Api;
+
+@Api
 @RestController
 @RequestMapping(path = "/history", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class TransactionHistoryController {
 
 	@Autowired
 	private TransactionHistoryService transactionHistoryService;
-	
+
 	@Autowired
 	private TokenDecryptionService tokenDecryptionService;
 
-	@PreAuthorize("hasAuthority('role_admin')")
 	@GetMapping(path = "/{id}")
 	public Transaction getOne(@PathVariable("id") String id) {
 		return transactionHistoryService.findById(id);
 	}
 
-	@PreAuthorize("hasAuthority('role_admin')")
 	@GetMapping
 	public List<Transaction> getList(@RequestHeader("bearer") String token) {
 

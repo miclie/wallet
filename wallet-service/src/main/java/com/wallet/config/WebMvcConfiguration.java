@@ -25,7 +25,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(currentUserHandlerMethodArgumentResolver());
 	}
-
+	
 	@Bean
 	public HandlerMethodArgumentResolver currentUserHandlerMethodArgumentResolver() {
 		return new HandlerMethodArgumentResolver() {
@@ -45,7 +45,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 			}
 		};
 	}
-
+	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {

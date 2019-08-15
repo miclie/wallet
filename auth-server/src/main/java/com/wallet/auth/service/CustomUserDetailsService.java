@@ -15,8 +15,12 @@ import com.wallet.repository.UserRepository;
 @Service(value = "userDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	public CustomUserDetailsService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String input) {

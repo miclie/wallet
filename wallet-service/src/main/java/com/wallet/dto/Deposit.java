@@ -2,11 +2,14 @@ package com.wallet.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 
@@ -14,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wallet.entity.DepositEntity;
 import com.wallet.entity.User;
 
 import io.swagger.annotations.ApiModel;
@@ -36,14 +38,21 @@ public class Deposit extends ResourceSupport implements Serializable {
 
 	private BigDecimal credit;
 
+	protected LocalDateTime createdOn;
+
+	protected LocalDateTime updatedOn;
+
 	@JsonCreator
 	public Deposit(@JsonProperty("username") String username, @JsonProperty("remaining") BigDecimal remaining,
-			@JsonProperty("credit") BigDecimal credit, @JsonProperty("transactionId") String transactionId) {
+			@JsonProperty("credit") BigDecimal credit, @JsonProperty("transactionId") String transactionId,
+			@JsonProperty("createdOn") LocalDateTime createdOn, @JsonProperty("updatedOn") LocalDateTime updatedOn) {
 		super();
 		this.username = username;
 		this.remaining = remaining;
 		this.credit = credit;
 		this.transactionId = transactionId;
+		this.createdOn = createdOn;
+		this.updatedOn = updatedOn;
 	}
 
 	public Deposit withLink(Link link) {

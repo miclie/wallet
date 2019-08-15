@@ -7,7 +7,6 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,13 +34,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 
 import com.wallet.entity.User;
 
-
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
-
-	@Value("${check-user-scopes}")
-	private Boolean checkUserScopes;
 
 	@Autowired
 	private DataSource dataSource;
@@ -62,7 +57,6 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
 	@Bean
 	public OAuth2RequestFactory requestFactory() {
 		CustomOauth2RequestFactory requestFactory = new CustomOauth2RequestFactory(clientDetailsService);
-		requestFactory.setCheckUserScopes(true);
 		return requestFactory;
 	}
 
@@ -90,8 +84,7 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints.tokenStore(tokenStore()).tokenEnhancer(jwtAccessTokenConverter())
 				.authenticationManager(authenticationManager).userDetailsService(userDetailsService);
-		if (checkUserScopes)
-			endpoints.requestFactory(requestFactory());
+
 	}
 
 	@Bean

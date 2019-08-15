@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 public class BaseIdEntity extends BaseEntity {
 
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -1674794807049088177L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,10 +8,7 @@ import org.springframework.hateoas.ResourceSupport;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wallet.entity.DepositEntity;
 import com.wallet.entity.TransactionHistoryEntity;
-import com.wallet.entity.User;
 
 import io.swagger.annotations.ApiModel;
 
@@ -32,9 +29,6 @@ public class Transaction extends ResourceSupport implements Serializable {
 		super();
 		this.id = entity.getId();
 		this.user = new UserDto(entity.getUser());
-		//this.deposit.setCredit(entity.getDeposit().getCredit());
-		//this.deposit.setRemaining(entity.getDeposit().getRemaining());
-
 	}
 
 	public Transaction withLink(Link link) {
