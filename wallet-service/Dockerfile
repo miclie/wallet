@@ -1,18 +1,9 @@
-FROM openjdk:8-jdk-alpine
+FROM java:8-jdk-alpine
 
-VOLUME ["/tmp", "/tmp/config", "/tmp/logs"]
+COPY ./target/wallet-service-0.0.1-SNAPSHOT.jar /usr/app/
 
-ENV TIME_ZONE America/Sao_Paulo
+WORKDIR /usr/app
 
-RUN apk --no-cache add \
-	tzdata \
-    # Set timezone
-    && echo "${TIME_ZONE}" > /etc/timezone \ 
-	&& ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime 
+RUN sh -c 'touch wallet-service-0.0.1-SNAPSHOT.jar'
 
-
-ADD /target/*.jar app.jar
-
-EXPOSE 9093
-
-ENTRYPOINT ["java","-Dspring.profiles.active=docker","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar", "--spring.config.location=classpath:/application.yml,file:/tmp/config/application.yml"]
+ENTRYPOINT ["java","-jar","wallet-service-0.0.1-SNAPSHOT.jar"]
