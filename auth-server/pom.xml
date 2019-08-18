@@ -3,7 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.wallet.auth</groupId>
 	<artifactId>auth-server</artifactId>
 	<packaging>jar</packaging>
 
@@ -105,6 +104,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 			</plugin>
+			 <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+            </plugin>
 		</plugins>
 	</build>
 
@@ -117,6 +119,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 </project>

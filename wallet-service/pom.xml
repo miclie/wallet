@@ -35,7 +35,7 @@
 		</dependency>
 		
 		<dependency>
-          <groupId>com.wallet.auth</groupId>
+          <groupId>com.wallet</groupId>
           <artifactId>auth-server</artifactId>
           <version>0.0.1-SNAPSHOT</version>
        </dependency>
@@ -157,6 +157,25 @@
 
 	<build>
 		<plugins>
+		 <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>install</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+            </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
