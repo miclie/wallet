@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@ApiModel(description = "Represents a person within the Game of Thrones fantasy world")
+@ApiModel(description = "DTO for depositing and withdrawing money to account")
 @JsonInclude(Include.NON_NULL)
 public class Deposit extends ResourceSupport implements Serializable {
 

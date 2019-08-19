@@ -12,7 +12,7 @@ import com.wallet.entity.TransactionHistoryEntity;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(description = "Represents a a family house within the Game of Thrones fantasy world")
+@ApiModel(description = "DTO for transaction")
 @JsonInclude(Include.NON_NULL)
 public class Transaction extends ResourceSupport implements Serializable {
 

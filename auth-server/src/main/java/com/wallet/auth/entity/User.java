@@ -1,7 +1,6 @@
 package com.wallet.auth.entity;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +25,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseIdEntity implements UserDetails {
-
 
 	private static final long serialVersionUID = -984160415989599291L;
 	private String email;

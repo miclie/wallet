@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -23,8 +22,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
-	
+	private CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -41,9 +40,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().exceptionHandling()
 				.authenticationEntryPoint(
 						(request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-				.and().logout().logoutUrl("/oauth/logout").logoutSuccessHandler(customLogoutSuccessHandler)
-				.and().authorizeRequests().antMatchers("/**").authenticated().and()
-				.httpBasic();
+				.and().logout().logoutUrl("/oauth/logout").logoutSuccessHandler(customLogoutSuccessHandler).and()
+				.authorizeRequests().antMatchers("/**").authenticated().and().httpBasic();
 	}
 
 	@Override

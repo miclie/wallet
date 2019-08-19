@@ -13,12 +13,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @MappedSuperclass
 @NoArgsConstructor
 public class BaseEntity implements Serializable {
-
 
 	private static final long serialVersionUID = -2464094025616066125L;
 

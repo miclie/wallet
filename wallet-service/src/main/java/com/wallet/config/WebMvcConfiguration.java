@@ -16,7 +16,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.wallet.model.CustomPrincipal;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebMvcConfiguration implements WebMvcConfigurer {
@@ -25,7 +24,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(currentUserHandlerMethodArgumentResolver());
 	}
-	
+
 	@Bean
 	public HandlerMethodArgumentResolver currentUserHandlerMethodArgumentResolver() {
 		return new HandlerMethodArgumentResolver() {
@@ -45,7 +44,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 			}
 		};
 	}
-	
+
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {

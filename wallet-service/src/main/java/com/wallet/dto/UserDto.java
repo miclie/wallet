@@ -11,7 +11,7 @@ import com.wallet.auth.entity.User;
 
 import io.swagger.annotations.ApiModel;
 
-@ApiModel(description = "Represents a a family house within the Game of Thrones fantasy world")
+@ApiModel(description = "DTO for User")
 @JsonInclude(Include.NON_NULL)
 public class UserDto  extends ResourceSupport implements Serializable {
 	
