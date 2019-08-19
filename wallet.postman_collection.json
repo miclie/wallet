@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "7cb32c87-080c-4777-9629-5225c28bcbda",
+		"name": "wallet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic YWRtaW5hcHA6cGFzc3dvcmQ=",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9092/uaa/oauth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"uaa",
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic YWRtaW5hcHA6cGFzc3dvcmQ=",
+						"type": "text"
+					},
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsibXMvYWRtaW4iLCJtcy91c2VyIiwibXcvYWRtaW5hcHAiXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyb2xlX2FkbWluIiwicm9sZV9zdXBlcmFkbWluIl0sImV4cCI6MTU2NjE3MzU1MCwiYXV0aG9yaXRpZXMiOlsicm9sZV9hZG1pbiIsImNhbl91cGRhdGVfdXNlciIsImNhbl9yZWFkX3VzZXIiLCJjYW5fY3JlYXRlX3VzZXIiLCJjYW5fZGVsZXRlX3VzZXIiXSwianRpIjoiYjZmN2RhNTctOTdjNS00NjkxLTgxODctNmQxYTkxNjIwMmQwIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImNsaWVudF9pZCI6ImFkbWluYXBwIn0.jWtxtWGwfVLd3Pi_C_O5BB9rDHoJQjTQWQLefuI9l_4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"transactionId\":\"3\",\n\t\"remaining\":10,\n\t\"credit\":10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9092/wallet-service/account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"wallet-service",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Account",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic YWRtaW5hcHA6cGFzc3dvcmQ=",
+						"type": "text"
+					},
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsibXMvYWRtaW4iLCJtcy91c2VyIiwibXcvYWRtaW5hcHAiXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyb2xlX2FkbWluIiwicm9sZV9zdXBlcmFkbWluIl0sImV4cCI6MTU2NjE3MzU1MCwiYXV0aG9yaXRpZXMiOlsicm9sZV9hZG1pbiIsImNhbl91cGRhdGVfdXNlciIsImNhbl9yZWFkX3VzZXIiLCJjYW5fY3JlYXRlX3VzZXIiLCJjYW5fZGVsZXRlX3VzZXIiXSwianRpIjoiYjZmN2RhNTctOTdjNS00NjkxLTgxODctNmQxYTkxNjIwMmQwIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImNsaWVudF9pZCI6ImFkbWluYXBwIn0.jWtxtWGwfVLd3Pi_C_O5BB9rDHoJQjTQWQLefuI9l_4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"transactionId\":\"3\",\n\t\"remaining\":10,\n\t\"credit\":10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9092/wallet-service/account",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"wallet-service",
+						"account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Money To Account",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic YWRtaW5hcHA6cGFzc3dvcmQ=",
+						"type": "text"
+					},
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsibXMvYWRtaW4iLCJtcy91c2VyIiwibXcvYWRtaW5hcHAiXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyb2xlX2FkbWluIiwicm9sZV9zdXBlcmFkbWluIl0sImV4cCI6MTU2NjE3NTE0MywiYXV0aG9yaXRpZXMiOlsicm9sZV9hZG1pbiIsImNhbl91cGRhdGVfdXNlciIsImNhbl9yZWFkX3VzZXIiLCJjYW5fY3JlYXRlX3VzZXIiLCJjYW5fZGVsZXRlX3VzZXIiXSwianRpIjoiYWEzODAzNjMtNWM5YS00MjIyLWE2NWUtZTMyMGFhMGFlNTQ4IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImNsaWVudF9pZCI6ImFkbWluYXBwIn0.dX2Q4qg2SCX2-Gb0w3NMv7eVfxsyx1O4KnuKmeJyLt8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9092/wallet-service/account/10/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"wallet-service",
+						"account",
+						"10",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Spend Money",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic YWRtaW5hcHA6cGFzc3dvcmQ=",
+						"type": "text"
+					},
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsibXMvYWRtaW4iLCJtcy91c2VyIiwibXcvYWRtaW5hcHAiXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyb2xlX2FkbWluIiwicm9sZV9zdXBlcmFkbWluIl0sImV4cCI6MTU2NjE3NTM3MiwiYXV0aG9yaXRpZXMiOlsicm9sZV9hZG1pbiIsImNhbl91cGRhdGVfdXNlciIsImNhbl9yZWFkX3VzZXIiLCJjYW5fY3JlYXRlX3VzZXIiLCJjYW5fZGVsZXRlX3VzZXIiXSwianRpIjoiNWE0NDJlNzktZGM4Yi00MmIzLWJjYWUtYzU0ZjFhMmE2Nzg3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImNsaWVudF9pZCI6ImFkbWluYXBwIn0.Kd3lSAo6EGPijdHykY5Q0vCet2sJuvY5FkatMqOGifw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9092/wallet-service/account/spend/10/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"wallet-service",
+						"account",
+						"spend",
+						"10",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get History",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Basic YWRtaW5hcHA6cGFzc3dvcmQ=",
+						"type": "text"
+					},
+					{
+						"key": "bearer",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsibXMvYWRtaW4iLCJtcy91c2VyIiwibXcvYWRtaW5hcHAiXSwidXNlcl9uYW1lIjoiYWRtaW4iLCJzY29wZSI6WyJyb2xlX2FkbWluIiwicm9sZV9zdXBlcmFkbWluIl0sImV4cCI6MTU2NjE3NTM3MiwiYXV0aG9yaXRpZXMiOlsicm9sZV9hZG1pbiIsImNhbl91cGRhdGVfdXNlciIsImNhbl9yZWFkX3VzZXIiLCJjYW5fY3JlYXRlX3VzZXIiLCJjYW5fZGVsZXRlX3VzZXIiXSwianRpIjoiNWE0NDJlNzktZGM4Yi00MmIzLWJjYWUtYzU0ZjFhMmE2Nzg3IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImNsaWVudF9pZCI6ImFkbWluYXBwIn0.Kd3lSAo6EGPijdHykY5Q0vCet2sJuvY5FkatMqOGifw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9092/wallet-service/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9092",
+					"path": [
+						"wallet-service",
+						"history"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

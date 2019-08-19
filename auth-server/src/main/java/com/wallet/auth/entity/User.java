@@ -1,4 +1,4 @@
-package com.wallet.entity;
+package com.wallet.auth.entity;
 
 import java.util.Collection;
 import java.util.Date;

@@ -32,7 +32,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
-import com.wallet.entity.User;
+import com.wallet.auth.entity.User;
 
 @Configuration
 @EnableAuthorizationServer

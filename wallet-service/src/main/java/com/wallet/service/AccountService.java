@@ -19,12 +19,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wallet.auth.entity.User;
 import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.controller.DepositController;
 import com.wallet.dto.Deposit;
 import com.wallet.dto.Transaction;
 import com.wallet.entity.AccountEntity;
-import com.wallet.entity.User;
 import com.wallet.exception.AccountBalanceCannotBeLessThanZeroException;
 import com.wallet.exception.BadRequestException;
 import com.wallet.exception.NoUserFoundException;
@@ -120,6 +120,7 @@ public class AccountService {
 		accountUpdated.setCredit(deposit.getCredit());
 		accountUpdated.setRemaining(deposit.getRemaining());
 		depositRepository.save(accountUpdated);
+		transactionHistoryService.saveTransactionHistory(accountUpdated, deposit, user);
 		return CompletableFuture.completedFuture(toDto(accountUpdated, deposit.getTransactionId()));
 	}
 
@@ -157,6 +158,10 @@ public class AccountService {
 		AccountEntity accountUpdated = accountOptional.get();
 		accountUpdated.setRemaining(accountUpdated.getRemaining().add(amount));
 		depositRepository.save(accountUpdated);
+		Deposit deposit = new Deposit();
+		deposit.setTransactionId(transactionId);
+		deposit.setRemaining(amount);
+		transactionHistoryService.saveTransactionHistory(accountUpdated, deposit, user);
 		return CompletableFuture.completedFuture(toDto(accountUpdated, transactionId));
 	}
 
@@ -179,6 +184,10 @@ public class AccountService {
 			throw new AccountBalanceCannotBeLessThanZeroException();
 		}
 		depositRepository.save(accountUpdated);
+		Deposit deposit = new Deposit();
+		deposit.setTransactionId(transactionId);
+		deposit.setRemaining(amount);
+		transactionHistoryService.saveTransactionHistory(accountUpdated, deposit, user);
 		return CompletableFuture.completedFuture(toDto(accountUpdated, transactionId));
 
 	}

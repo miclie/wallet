@@ -78,7 +78,7 @@ public class DepositController {
 	}
 
 	@ApiOperation(value = "Withdraws Money from Account", response = Deposit.class)
-	@PutMapping(path = "/{amount/{transactionId}}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PutMapping(path = "/spend/{amount}/{transactionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public CompletableFuture<Deposit> spendMoney(@PathVariable("amount") BigDecimal amount,
 			@PathVariable("transactionId") String transactionId, @RequestHeader("bearer") String token)
 			throws NoUserFoundException, AccountNotFoundException, TransactionNumberAlreadyExists,

@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableTransactionManagement
-@EntityScan(basePackages = "com.wallet.entity")
-@EnableJpaRepositories(basePackages = "com.wallet.repository")
+@EntityScan(basePackages = {"com.wallet.entity","com.wallet.auth.entity"})
+@EnableJpaRepositories(basePackages = {"com.wallet.repository","com.wallet.auth.repository"})
 @EnableEntityLinks
 @EnableAsync
 public class Application {

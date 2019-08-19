@@ -7,7 +7,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.wallet.entity.User;
+import com.wallet.auth.entity.User;
 
 import io.swagger.annotations.ApiModel;
 

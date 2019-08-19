@@ -1,6 +1,7 @@
-CREATE DATABASE oauth2;
+DROP DATABASE IF EXISTS walletdb;
+CREATE DATABASE walletdb;
 
-USE oauth2;
+USE walletdb;
 
 DROP TABLE IF EXISTS `oauth_client_details`;
 CREATE TABLE `oauth_client_details` (

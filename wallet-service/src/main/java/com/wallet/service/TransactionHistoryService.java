@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wallet.auth.entity.User;
 import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.controller.TransactionHistoryController;
 import com.wallet.dto.Deposit;
 import com.wallet.dto.Transaction;
 import com.wallet.entity.AccountEntity;
 import com.wallet.entity.TransactionHistoryEntity;
-import com.wallet.entity.User;
 import com.wallet.repository.TransactionHistoryEntityRepository;
 
 @Service

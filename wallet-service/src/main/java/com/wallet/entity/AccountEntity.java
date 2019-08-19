@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+import com.wallet.auth.entity.User;
 import com.wallet.dto.Deposit;
 
 import lombok.Data;

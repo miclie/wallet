@@ -3,7 +3,6 @@ package com.wallet;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -19,18 +18,16 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.wallet.auth.entity.User;
+import com.wallet.auth.repository.UserRepository;
 import com.wallet.auth.service.CustomUserDetailsService;
 import com.wallet.dto.Deposit;
-import com.wallet.dto.Transaction;
 import com.wallet.entity.AccountEntity;
-import com.wallet.entity.TransactionHistoryEntity;
-import com.wallet.entity.User;
 import com.wallet.exception.AccountBalanceCannotBeLessThanZeroException;
 import com.wallet.exception.NoUserFoundException;
 import com.wallet.exception.TransactionNumberAlreadyExists;
 import com.wallet.repository.AccountEntityRepository;
 import com.wallet.repository.TransactionHistoryEntityRepository;
-import com.wallet.repository.UserRepository;
 import com.wallet.service.AccountService;
 import com.wallet.service.TransactionHistoryService;
 
@@ -104,7 +101,6 @@ public class ApplicationTests {
 		Assert.assertEquals(updatedDeposit.getRemaining().compareTo(new BigDecimal(20)), 0);
 	}
 
-	
 	public User createUser() {
 		User user = new User();
 		user.setId(1L);
@@ -133,7 +129,5 @@ public class ApplicationTests {
 		deposit.setUsername(username);
 		return deposit;
 	}
-
-	
 
 }
